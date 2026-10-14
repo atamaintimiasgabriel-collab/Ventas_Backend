@@ -20,6 +20,15 @@ using SistemaVentasMotorrepuestos.API.Hubs;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Railway publica el puerto de cada servicio mediante la variable PORT.
+// Kestrel debe escuchar en todas las interfaces dentro del contenedor para
+// que el proxy de Railway pueda alcanzar la API.
+var railwayPort = Environment.GetEnvironmentVariable("PORT");
+if (!string.IsNullOrWhiteSpace(railwayPort) && int.TryParse(railwayPort, out var port))
+{
+    builder.WebHost.UseUrls($"http://0.0.0.0:{port}");
+}
+
 // En desarrollo no depender del proveedor Windows Event Log, que requiere
 // permisos administrativos y puede convertir un error registrable en un fallo
 // de la solicitud. Producción conserva los proveedores predeterminados.
@@ -331,7 +340,13 @@ app.UseMiddleware<ManejoExcepcionesMiddleware>();
 // Headers de seguridad estrictos (Fase 1.4.4.8)
 app.UseMiddleware<SecurityHeadersMiddleware>();
 
-app.UseHttpsRedirection();
+// Railway termina TLS en su borde y reenvía HTTP al contenedor. La propia
+// plataforma ya fuerza HTTPS públicamente; redirigir otra vez dentro de la
+// aplicación produciría un bucle. En los demás entornos se conserva HTTPS.
+if (string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable("RAILWAY_ENVIRONMENT")))
+{
+    app.UseHttpsRedirection();
+}
 
 // Habilitar CORS
 app.UseCors("CorsPolicy");
