@@ -1,0 +1,15 @@
+{
+  "normativeVersion": "SUNAT-CPE-2026-08-26",
+  "issuer": "SUNAT",
+  "publicationDate": "2026-08-26",
+  "acquiredDate": "2026-09-22",
+  "source": {
+    "name": "Reglas de validación CPE - actualizado al 26.08.2026",
+    "url": "https://cpe.sunat.gob.pe/sites/default/files/2026-08/Reglas%20de%20validaci%C3%B3n%20-%20actualizado%20al%2026.08.2026.xlsx",
+    "file": "source/ReglasValidacionCPE-2026-08-26.xlsx",
+    "size": 855113,
+    "sha256": "CB5E871CFE3B81ABEA7FAF25B156E5D35B21E8C4837979350919926612DA73B6"
+  },
+  "catalogFile": "catalogs/catalogs.json",
+  "scope": ["01", "03", "07", "08"]
+}
